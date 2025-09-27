@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tienda de Celulares Modernos</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+<style>
+/* --- Color de la pagina weba --- */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  color: #fff;
+}
+
+/* --- Encabezado --- */
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  text-align: center;
+  margin: 30px 0;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5), 0 0 15px rgba(255,255,255,0.1);
+}
+
+/* --- Lista de celulares --- */
+#info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  padding: 20px;
+}
+
+/* --- Tarjeta de celular --- */
+.celular {
+  background: #1b1b2f;
+  border-radius: 20px;
+  padding: 20px;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.6), 0 0 15px rgba(0,255,255,0.2) inset;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.celular:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.7), 0 0 25px rgba(0,255,255,0.4) inset;
+}
+.celular img {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 15px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 0 15px rgba(0,255,255,0.3);
+}
+.celular img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(0,255,255,0.6);
+}
+.celular h3 {
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+  color: #fff;
+}
+.celular p {
+  margin: 3px 0;
+  font-size: 0.95rem;
+  color: #c0c0c0;
+}
+
+/* --- Botones --- */
+.comprar {
+  margin-top: 10px;
+  padding: 12px 25px;
+  background: linear-gradient(90deg, #0090ff, #0055ff);
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(0,144,255,0.7);
+  transition: transform 0.3s;
+}
+.comprar:hover { transform: scale(1.08); }
+
+.cerrar {
+  margin-top: 15px;
+  padding: 12px 25px;
+  background: linear-gradient(90deg, #ff3b3b, #ff0000);
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(255,0,0,0.7);
+  transition: transform 0.3s;
+}
+.cerrar:hover { transform: scale(1.1); }
+
+/* --- Modal de celulares --- */
+#modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.9);
+  justify-content: center;
+  align-items: center;
+}
+#modalContent {
+  background: linear-gradient(145deg, #1b1b2f, #2c2c44);
+  border-radius: 25px;
+  padding: 30px;
+  width: 90%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 0 50px rgba(0,240,255,0.4), 0 0 80px rgba(255,0,200,0.3);
+}
+#modalContent img {
+  width: 230px;
+  height: 230px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 25px rgba(0,255,255,0.4), 0 0 40px rgba(255,0,200,0.3);
+  transition: transform 0.3s;
+}
+#modalContent img:hover { transform: scale(1.05); }
+#modalContent h3 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.8rem;
+  color: #fff;
+  margin-bottom: 15px;
+}
+#modalContent p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  color: #eee;
+  margin-bottom: 25px;
+  line-height: 1.4;
+}
+
+/* --- Notificación --- */
+#notificacion {
+  position: fixed;
+  top: 20px;
+  right: -350px;
+  background: linear-gradient(90deg, #0090ff, #0055ff);
+  padding: 15px 25px;
+  border-radius: 10px;
+  font-weight: bold;
+  box-shadow: 0 0 20px rgba(0,144,255,0.7);
+  transition: right 0.5s ease;
+  z-index: 2000;
+}
+#notificacion.mostrar { right: 20px; }
+
+
+#modalBienvenida {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.85);
+  z-index: 1500;
+}
+#bienvenidaContent {
+  background: linear-gradient(145deg, #2c2c44, #1b1b2f);
+  border-radius: 25px;
+  padding: 30px;
+  max-width: 500px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 0 40px rgba(0,240,255,0.5), 0 0 80px rgba(255,0,200,0.4);
+  font-family: 'Orbitron', sans-serif;
+}
+#bienvenidaContent h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  background: linear-gradient(90deg, #00f0ff, #ff00c8, #00a6ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(0,255,255,0.3);
+}
+#bienvenidaContent p {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin: 8px 0;
+  background: linear-gradient(90deg, #00f0ff, #ff00c8, #00a6ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px rgba(0,255,255,0.4);
+  font-weight: 700;
+}
+</style>
+</head>
+<body>
+
+<h1>Celulares reacondicionados</h1>
+<div id="info"></div>
+
+<!-- Modal de celulares -->
+<div id="modal">
+  <div id="modalContent">
+    <img id="modalImg" alt="">
+    <h3 id="modalTitulo"></h3>
+    <p id="modalDescripcion"></p>
+    <button class="cerrar" onclick="cerrarModal()">Cerrar</button>
+  </div>
+</div>
+
+<!-- Modal de Bienvenida -->
+<div id="modalBienvenida">
+  <div id="bienvenidaContent">
+    <h2>!Bienvenidos a mi pagina Web!</h2>
+    <p><strong>Nombre:</strong> Elias Ramirez Hernandez</p>
+    <p><strong>Matrícula:</strong> #2209563</p>
+    <p><strong>EVIDENCIA DE APRENDIZAJE ETAPA 2</strong></p>
+    <p><strong>Materia:</strong> Desarrollo de Paginas Web</p>
+    <p><strong>Docente:</strong> Francisco Roman Coronado Alonso</p>
+    <button class="cerrar" onclick="cerrarBienvenida()">Cerrar</button>
+  </div>
+</div>
+
+<!-- Notificación -->
+<div id="notificacion"></div>
+
+<script>
+let celulares = [
+  { marca: "Samsung", modelo: "Galaxy S21", ram: "8GB", almacenamiento: "128GB", precio: "$5,200 MXN", descripcion: "Smartphone de gama alta con excelente cámara y pantalla AMOLED. Su rendimiento es increíble para juegos y multitarea, con batería que dura todo el día y un diseño moderno y elegante.", imagen: "samsung21.jpg" },
+  { marca: "Apple", modelo: "iPhone 13", ram: "4GB", almacenamiento: "128GB", precio: "$7,800 MXN", descripcion: "El iPhone más popular con chip A15 Bionic, gran rendimiento y eficiencia energética. Perfecto para fotografía y video, con actualizaciones de iOS que garantizan seguridad y nuevas funciones durante años.", imagen: "IPHONE13PN.PNG" },
+  { marca: "Xiaomi", modelo: "Redmi Note 10", ram: "6GB", almacenamiento: "128GB", precio: "$3,200 MXN", descripcion: "Económico y potente, ideal para quienes buscan calidad-precio. Pantalla AMOLED, batería de larga duración y rendimiento sólido para redes sociales, multimedia y tareas diarias.", imagen: "redmi.avif" },
+  { marca: "Motorola", modelo: "E6 Plus", ram: "4GB", almacenamiento: "64GB", precio: "$2,500 MXN", descripcion: "Celular accesible, compacto y práctico para el día a día. Rendimiento confiable para llamadas, mensajes y aplicaciones básicas, con batería suficiente para todo el día.", imagen: "moto.avif" },
+  { marca: "HUAWEI", modelo: "P30 Pro", ram: "8GB", almacenamiento: "132GB", precio: "$4,900 MXN", descripcion: "Cámara Leica y gran autonomía de batería, ideal para fotografía y video. Pantalla brillante y diseño elegante que lo hacen un dispositivo atractivo y potente.", imagen: "p30.jpg" },
+  { marca: "Samsung", modelo: "A55 5G", ram: "8GB", almacenamiento: "128GB", precio: "$6,000 MXN", descripcion: "Compatible con 5G, rápido y con pantalla Super AMOLED. Ideal para multimedia, juegos y productividad diaria con gran autonomía y diseño moderno.", imagen: "a55.webp" },
+  { marca: "Apple", modelo: "iPhone 15 Pro Max", ram: "8GB", almacenamiento: "256GB", precio: "$9,500 MXN", descripcion: "Lo último de Apple, máximo rendimiento y diseño premium. Cámara avanzada, pantalla brillante, rendimiento top y batería de larga duración. Perfecto para usuarios exigentes.", imagen: "15.jpg" },
+  { marca: "HONOR", modelo: "Magic 7 Lite", ram: "12GB", almacenamiento: "256GB", precio: "$5,800 MXN", descripcion: "Gran batería y potencia, pensado para multitarea y gaming. Pantalla grande y brillante, diseño elegante y cámara de alta calidad. Ideal para quienes buscan un celular completo y moderno.", imagen: "magic.jpeg" }
+];
+
+function mostrarCelulares() {
+  let salida = "";
+  for (let i = 0; i < celulares.length; i++) {
+    let cel = celulares[i];
+    salida += `
+      <div class="celular">
+        <img src="${cel.imagen}" alt="${cel.modelo}" onclick="mostrarInfo(${i})">
+        <h3>${cel.marca} ${cel.modelo}</h3>
+        <p>RAM: ${cel.ram}</p>
+        <p>Almacenamiento: ${cel.almacenamiento}</p>
+        <p>Precio: ${cel.precio}</p>
+        <button class="comprar" onclick="comprar(${i})">Comprar</button>
+      </div>`;
+  }
+  document.getElementById("info").innerHTML = salida;
+}
+
+function mostrarInfo(indice) {
+  let cel = celulares[indice];
+  document.getElementById("modalImg").src = cel.imagen;
+  document.getElementById("modalTitulo").innerText = `${cel.marca} ${cel.modelo}`;
+  document.getElementById("modalDescripcion").innerText = cel.descripcion;
+  document.getElementById("modal").style.display = "flex";
+}
+
+function comprar(indice) {
+  let cel = celulares[indice];
+  let notif = document.getElementById("notificacion");
+  notif.innerText = `¡Has comprado ${cel.marca} ${cel.modelo}!`;
+  notif.classList.add("mostrar");
+  setTimeout(() => notif.classList.remove("mostrar"), 3000);
+}
+
+function cerrarModal() { document.getElementById("modal").style.display = "none"; }
+document.getElementById("modal").addEventListener("click", e => { if(e.target === document.getElementById("modal")) cerrarModal(); });
+
+function cerrarBienvenida() { document.getElementById("modalBienvenida").style.display = "none"; }
+window.addEventListener("load", () => { document.getElementById("modalBienvenida").style.display = "flex"; });
+
+// Inicializar
+mostrarCelulares();
+</script>
+</body>
+</html>
